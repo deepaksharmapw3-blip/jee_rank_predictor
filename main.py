@@ -94,20 +94,25 @@ def predict(
             condition = condition & (institute_filter['Quota'] == quota)
             
         # Apply Interest branch filtering
+        coding_keywords = ["computer", "information technology", "data science", "artificial intelligence", "software", "computing", "computational"]
+        
         if interest == "Coding":
-            coding_keywords = ["computer", "information technology", "mathematics and computing", "data science", "artificial intelligence", "software", "computing", "computational"]
             interest_mask = institute_filter['Academic Program Name'].str.contains('|'.join(coding_keywords), case=False, na=False)
             condition = condition & interest_mask
         elif interest == "Research":
             research_keywords = ["physics", "chemistry", "mathematics", "science", "biotech", "biological", "geophysics", "aerospace", "astronomy", "research"]
-            interest_mask = institute_filter['Academic Program Name'].str.contains('|'.join(research_keywords), case=False, na=False) | \
-                            institute_filter['Academic Program Name'].str.contains("Bachelor of Science", case=False, na=False) | \
-                            institute_filter['Academic Program Name'].str.contains("BS", case=False, na=False)
-            condition = condition & interest_mask
+            interest_mask = (institute_filter['Academic Program Name'].str.contains('|'.join(research_keywords), case=False, na=False) | \
+                             institute_filter['Academic Program Name'].str.contains("Bachelor of Science", case=False, na=False) | \
+                             institute_filter['Academic Program Name'].str.contains("BS", case=False, na=False))
+            # Exclude coding branches
+            exclude_mask = -institute_filter['Academic Program Name'].str.contains('|'.join(coding_keywords), case=False, na=False)
+            condition = condition & interest_mask & exclude_mask
         elif interest == "MBA":
             mba_keywords = ["industrial", "operations research", "management", "business", "economics", "production", "mba"]
             interest_mask = institute_filter['Academic Program Name'].str.contains('|'.join(mba_keywords), case=False, na=False)
-            condition = condition & interest_mask
+            # Exclude coding branches
+            exclude_mask = -institute_filter['Academic Program Name'].str.contains('|'.join(coding_keywords), case=False, na=False)
+            condition = condition & interest_mask & exclude_mask
             
         filtered_df = institute_filter[condition]
         filtered_df = filtered_df.sort_values(by='Closing Rank').head(20)
