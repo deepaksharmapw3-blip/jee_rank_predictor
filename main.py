@@ -27,7 +27,7 @@ def load_jee_data():
         
         df_global = df
         print(df.columns.tolist())
-        print("🎉 Real Cutoff Data Loaded Successfully into FastAPI!")
+        print("Real Cutoff Data Loaded Successfully into FastAPI!")
     except Exception as e:
         print("Error loading data:", e)
 
@@ -46,11 +46,13 @@ def predict(
     exam_type: str = Form(...),
     rank: int = Form(...),
     gender: str = Form(...),
+    quota: str = Form("Any"),
     interest: str = Form(None)
 ):
 
     print("Selected Exam =", exam_type)
     print("Rank =", rank)
+    print("Quota =", quota)
     global df_global
     
     if df_global is None:
@@ -87,7 +89,10 @@ def predict(
         print("Total Institutes =",
         len(institute_filter))
 
-        condition = (df_global['Closing Rank'] >= rank) & (df_global['Gender'] == gender_filter)
+        condition = (institute_filter['Closing Rank'] >= rank) & (institute_filter['Gender'] == gender_filter)
+        if quota != "Any":
+            condition = condition & (institute_filter['Quota'] == quota)
+            
         filtered_df = institute_filter[condition]
         filtered_df = filtered_df.sort_values(by='Closing Rank').head(20)
         
@@ -96,6 +101,7 @@ def predict(
             colleges_list.append({
                 "institute": row['Institute'],
                 "program": row['Academic Program Name'],
+                "quota": row['Quota'],
                 "opening": int(row['Opening Rank']),
                 "closing": int(row['Closing Rank'])
             })
@@ -106,6 +112,7 @@ def predict(
             context={
                 "rank": rank, 
                 "gender": gender,
+                "quota": quota,
                 "interest": interest,
                 "colleges": colleges_list
             }

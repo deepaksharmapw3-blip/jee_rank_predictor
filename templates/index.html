@@ -1,49 +1,231 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>JEE Rank Predictor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JEE Rank Predictor 2026</title>
+    <!-- Modern Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-hover-border: rgba(255, 255, 255, 0.16);
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --primary-gradient: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --input-bg: rgba(15, 23, 42, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Decorative background glows */
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        body::before {
+            background: #4f46e5;
+            top: 15%;
+            left: 15%;
+        }
+        body::after {
+            background: #db2777;
+            bottom: 15%;
+            right: 15%;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 540px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .container:hover {
+            border-color: var(--glass-hover-border);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #f8fafc, #c084fc, #6366f1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.025em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #cbd5e1;
+            letter-spacing: 0.025em;
+            margin-left: 0.25rem;
+        }
+
+        select, input[type="number"] {
+            width: 100%;
+            background: var(--input-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 0.85rem 1rem;
+            font-size: 1rem;
+            color: var(--text-main);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        select:focus, input[type="number"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-glow);
+            background: rgba(15, 23, 42, 0.8);
+        }
+
+        select option {
+            background-color: #1e1b4b;
+            color: var(--text-main);
+        }
+
+        button {
+            width: 100%;
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px 0 rgba(139, 92, 246, 0.4);
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px 0 rgba(139, 92, 246, 0.6);
+            background: linear-gradient(135deg, #b794f4 0%, #6d28d9 100%);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<h1>JEE Rank Predictor</h1>
+<div class="container">
+    <h1>JEE Rank Predictor</h1>
+    <p class="subtitle">Predict your best engineering college options for 2026</p>
 
-<form action="/predict" method="post">
-    <label>Exam Type:</label>
-    <select name="exam_type">
-       <option value="advanced">JEE Advanced</option>
-       <option value="mains">JEE Main</option>
-</select>
+    <form action="/predict" method="post">
+        <div class="form-group">
+            <label for="exam_type">Exam Type</label>
+            <select name="exam_type" id="exam_type">
+                <option value="advanced">JEE Advanced (IITs)</option>
+                <option value="mains">JEE Main (NITs, IIITs, GFTIs)</option>
+            </select>
+        </div>
 
-<br><br>
+        <div class="form-group">
+            <label for="rank">JEE Rank</label>
+            <input type="number" name="rank" id="rank" placeholder="Enter your rank" min="1" required>
+        </div>
 
-    <label>Rank:</label>
-    <input type="number" name="rank" required>
+        <div class="form-group">
+            <label for="gender">Gender</label>
+            <select name="gender" id="gender">
+                <option value="Male">Male / Gender-Neutral</option>
+                <option value="Female">Female-only</option>
+            </select>
+        </div>
 
-    <br><br>
+        <div class="form-group">
+            <label for="quota">Quota</label>
+            <select name="quota" id="quota">
+                <option value="Any">Any Quota / Default</option>
+                <option value="AI">All India (AI)</option>
+                <option value="HS">Home State (HS)</option>
+                <option value="OS">Other State (OS)</option>
+                <option value="GO">Goa State Quota (GO)</option>
+                <option value="JK">Jammu & Kashmir (JK)</option>
+                <option value="LA">Ladakh (LA)</option>
+            </select>
+        </div>
 
-    <label>Gender:</label>
-    <select name="gender">
-        <option value="Male">Male</option>
-        <option value="Female">Female</option>
-    </select>
+        <div class="form-group">
+            <label for="interest">Preferred Area of Interest</label>
+            <select name="interest" id="interest">
+                <option value="Coding">Coding / Tech</option>
+                <option value="Research">Research & Core Sciences</option>
+                <option value="MBA">Management & MBA</option>
+                <option value="Undecided">Undecided</option>
+            </select>
+        </div>
 
-    <br><br>
-    
-    <label>Interest:</label>
-    <select>
-        <option>Coding</option>
-        <option>Research</option>
-        <option>MBA</option>
-        <option>Undecided</option>
-    </select>
-
-    <br><br>
-
-    <button type="submit">
-        Predict
-    </button>
-
-</form>
+        <button type="submit">Predict Options</button>
+    </form>
+</div>
 
 </body>
 </html>
