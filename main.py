@@ -17,7 +17,7 @@ def load_jee_data():
     global df_global
     github_raw_url = "https://raw.githubusercontent.com/atmabodha/OpenNLP/main/IIT-JEE/JEE_2025_Cutoffs.xlsx"
     try:
-        print("GitHub থেকে ফাইলটি সরাসরি লোড করার চেষ্টা করা হচ্ছে...")
+        print("GitHub file try to loaded...")
         response = requests.get(github_raw_url)
         df = pd.read_excel(io.BytesIO(response.content), engine='openpyxl')
         
@@ -41,7 +41,16 @@ def home(request: Request):
     name="index.html")
 
 @app.post("/predict")
-def predict(request: Request, rank: int = Form(...), gender: str = Form(...), interest: str = Form(None)):
+def predict(
+    request: Request,
+    exam_type: str = Form(...),
+    rank: int = Form(...),
+    gender: str = Form(...),
+    interest: str = Form(None)
+):
+
+    print("Selected Exam =", exam_type)
+    print("Rank =", rank)
     global df_global
     
     if df_global is None:
@@ -51,10 +60,35 @@ def predict(request: Request, rank: int = Form(...), gender: str = Form(...), in
         gender_filter = "Female-only (including Supernumerary)"
     else:
         gender_filter = "Gender-Neutral"
+
+    if exam_type == "advanced":
+
+        institute_filter = df_global[
+             df_global["Institute"].str.contains(
+                "Indian Institute of Technology",
+               case= False,
+               na= False 
+             )
+        ]    
+
+    else:
+
+        institute_filter = df_global[
+             -df_global["Institute"].str.contains(
+                "Indian Institute of Technology",
+                case=False,
+                na=False
+             )
+        ]
         
     try:
+
+        print("Exam Type =", exam_type)
+        print("Total Institutes =",
+        len(institute_filter))
+
         condition = (df_global['Closing Rank'] >= rank) & (df_global['Gender'] == gender_filter)
-        filtered_df = df_global[condition]
+        filtered_df = institute_filter[condition]
         filtered_df = filtered_df.sort_values(by='Closing Rank').head(20)
         
         colleges_list = []

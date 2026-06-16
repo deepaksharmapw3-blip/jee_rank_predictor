@@ -8,8 +8,15 @@
 <h1>JEE Rank Predictor</h1>
 
 <form action="/predict" method="post">
+    <label>Exam Type:</label>
+    <select name="exam_type">
+       <option value="advanced">JEE Advanced</option>
+       <option value="mains">JEE Main</option>
+</select>
 
-    <label>JEE Advanced Rank:</label>
+<br><br>
+
+    <label>Rank:</label>
     <input type="number" name="rank" required>
 
     <br><br>
