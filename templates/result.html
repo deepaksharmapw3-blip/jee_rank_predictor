@@ -22,6 +22,7 @@
             --input-bg: rgba(15, 23, 42, 0.6);
             --success: #10b981;
             --warning: #f59e0b;
+            --danger: #ef4444;
         }
 
         * {
@@ -63,7 +64,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             background: var(--glass-bg);
             backdrop-filter: blur(20px);
@@ -235,6 +236,193 @@
             font-size: 1.1rem;
         }
 
+        /* College Comparer FAB & Modal Styles */
+        .compare-fab {
+            position: fixed;
+            bottom: 2.5rem;
+            right: 2.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 1.1rem 2.2rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.5);
+            display: none;
+            align-items: center;
+            gap: 0.6rem;
+            z-index: 100;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .compare-fab:hover {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(139, 92, 246, 0.7);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(30, 27, 75, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 950px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.3s;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: white;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .comparison-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .comparison-card:hover {
+            border-color: var(--glass-hover-border);
+            transform: translateY(-2px);
+        }
+
+        .comparison-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-gradient);
+        }
+
+        .comparison-card h4 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #fff;
+            line-height: 1.4;
+            min-height: 50px;
+        }
+
+        .comparison-card .program-name {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            min-height: 55px;
+            line-height: 1.4;
+        }
+
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.6rem;
+            font-size: 0.95rem;
+        }
+
+        .metric-row:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: var(--text-muted);
+        }
+
+        .metric-value {
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .chance-badge {
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 6px;
+            text-transform: uppercase;
+        }
+
+        .chance-safe {
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .chance-borderline {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--warning);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .chance-risky {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 1.75rem;
@@ -244,6 +432,12 @@
             }
             th, td {
                 padding: 1rem;
+            }
+            .compare-fab {
+                bottom: 1.5rem;
+                right: 1.5rem;
+                padding: 0.9rem 1.8rem;
+                font-size: 0.95rem;
             }
         }
     </style>
@@ -288,6 +482,7 @@
                 <table>
                     <thead>
                         <tr>
+                            <th style="width: 70px; text-align: center;">Compare</th>
                             <th>Institute</th>
                             <th>Academic Program Name</th>
                             <th>Quota</th>
@@ -298,6 +493,15 @@
                     <tbody>
                         {% for college in colleges %}
                         <tr>
+                            <td style="text-align: center;">
+                                <input type="checkbox" class="college-select" 
+                                       data-institute="{{ college.institute }}" 
+                                       data-program="{{ college.program }}" 
+                                       data-quota="{{ college.quota }}" 
+                                       data-opening="{{ college.opening }}" 
+                                       data-closing="{{ college.closing }}"
+                                       style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--primary);">
+                            </td>
                             <td style="font-weight: 500; color: #f1f5f9;">{{ college.institute }}</td>
                             <td>{{ college.program }}</td>
                             <td><span class="badge badge-quota">{{ college.quota }}</span></td>
@@ -321,6 +525,126 @@
         <a href="/" class="back-btn">← Go Back</a>
     </div>
 </div>
+
+<!-- Floating Action Button for Comparison -->
+<button id="compareBtn" class="compare-fab">
+    ⚖️ Compare Selected (<span id="selectedCount">0</span>)
+</button>
+
+<!-- Comparison Modal Overlay -->
+<div id="compareModal" class="modal-overlay">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="section-title" style="margin-bottom: 0; border: none; padding: 0;">College Comparison</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div id="comparisonGrid" class="comparison-grid">
+            <!-- Dynamic comparison cards will be inserted here by JavaScript -->
+        </div>
+        <div style="text-align: center; margin-top: 1rem;">
+            <button class="back-btn" onclick="closeModal()" style="margin-top: 0; background: var(--primary-gradient); border-color: transparent;">Close Comparison</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const checkboxes = document.querySelectorAll('.college-select');
+    const compareBtn = document.getElementById('compareBtn');
+    const selectedCount = document.getElementById('selectedCount');
+    const modal = document.getElementById('compareModal');
+    const comparisonGrid = document.getElementById('comparisonGrid');
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener('change', () => {
+            const checked = document.querySelectorAll('.college-select:checked');
+            
+            if (checked.length > 3) {
+                cb.checked = false;
+                alert('You can compare a maximum of 3 colleges at a time.');
+                return;
+            }
+
+            selectedCount.textContent = checked.length;
+            
+            if (checked.length >= 2) {
+                compareBtn.style.display = 'flex';
+            } else {
+                compareBtn.style.display = 'none';
+            }
+        });
+    });
+
+    compareBtn.addEventListener('click', () => {
+        const checked = document.querySelectorAll('.college-select:checked');
+        comparisonGrid.innerHTML = '';
+
+        checked.forEach(cb => {
+            const data = cb.dataset;
+            
+            // Calculate safety gap based on user's rank
+            const userRank = parseInt("{{ rank }}");
+            const closingRank = parseInt(data.closing);
+            const gap = closingRank - userRank;
+            
+            let safetyClass = 'rank-opening';
+            let safetyText = 'Safe';
+            let badgeClass = 'chance-safe';
+            
+            if (gap < 0) {
+                safetyClass = 'error';
+                safetyText = 'Risky (Below Cutoff)';
+                badgeClass = 'chance-risky';
+            } else if (gap < (closingRank * 0.1)) {
+                // Within 10% of the closing rank is borderline
+                safetyClass = 'rank-closing';
+                safetyText = 'Borderline';
+                badgeClass = 'chance-borderline';
+            }
+
+            const card = document.createElement('div');
+            card.className = 'comparison-card';
+            card.innerHTML = `
+                <h4>${data.institute}</h4>
+                <div class="program-name">${data.program}</div>
+                
+                <div class="metric-row" style="margin-top: auto;">
+                    <span class="metric-label">Quota</span>
+                    <span class="badge badge-quota">${data.quota}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Opening Rank</span>
+                    <span class="metric-value">${data.opening}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Closing Rank</span>
+                    <span class="metric-value">${data.closing}</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Safety Margin</span>
+                    <span class="metric-value ${safetyClass === 'error' ? 'rank-closing' : 'rank-opening'}">${gap >= 0 ? '+' : ''}${gap} ranks</span>
+                </div>
+                <div class="metric-row">
+                    <span class="metric-label">Admission Chance</span>
+                    <span class="chance-badge ${badgeClass}">${safetyText}</span>
+                </div>
+            `;
+            comparisonGrid.appendChild(card);
+        });
+
+        modal.classList.add('active');
+    });
+
+    function closeModal() {
+        modal.classList.remove('active');
+    }
+
+    // Close modal when clicking outside the content block
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+</script>
 
 </body>
 </html>
